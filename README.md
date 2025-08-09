@@ -82,9 +82,10 @@ Step 1: Connect esp32 to the laptop and upload the code
 Step 2: Connect the OLED Display
 <img width="3188" height="1202" alt="frame (3)" src="https://github.com/MadonaRoseIrenius/SOCIOMETER/blob/main/Images/IMG_20250809_115530.jpg" />
 Step 3: Connect it to powerbank
-<img width="3188" height="1202" alt="frame (3)" src="" />
+Step 4: Finally tun it into a wearable headband
+<img width="3188" height="1202" alt="frame (3)" src="https://github.com/MadonaRoseIrenius/SOCIOMETER/blob/main/Images/final.jpg" />
 ![Final](Add photo of final product here)
-*Explain the final build*
+<img width="3188" height="1202" alt="frame (3)" src="https://github.com/MadonaRoseIrenius/SOCIOMETER/blob/main/Images/final.jpg" />
 
 ### Project Demo
 # Video
