@@ -77,8 +77,12 @@ OLED display
 <img width="3188" height="1202" alt="frame (3)" src="https://github.com/MadonaRoseIrenius/SOCIOMETER/blob/main/Sociometer/Images/IMG_20250809_111924.jpg" />
 ESP 32
 ![Build](Add photos of build process here)
-*Explain the build steps*
-
+Step 1: Connect esp32 to the laptop and upload the code
+<img width="3188" height="1202" alt="frame (3)" src="https://github.com/MadonaRoseIrenius/SOCIOMETER/blob/main/Images/IMG_20250809_115456.jpg" />
+Step 2: Connect the OLED Display
+<img width="3188" height="1202" alt="frame (3)" src="" />
+Step 3: Connect it to powerbank
+<img width="3188" height="1202" alt="frame (3)" src="" />
 ![Final](Add photo of final product here)
 *Explain the final build*
 
