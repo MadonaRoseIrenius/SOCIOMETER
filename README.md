@@ -72,7 +72,7 @@ SCHEMATIV
 # Build Photos
 <img width="3188" height="1202" alt="frame (3)" src="https://github.com/MadonaRoseIrenius/SOCIOMETER/blob/main/Images/IMG_20250809_111913_1.jpg" />
 POWERBANK
-<img width="3188" height="1202" alt="frame (3)" src="https://github.com/MadonaRoseIrenius/SOCIOMETER/blob/main/Sociometer/Images/IMG_20250809_111938_1.jpg" />
+<img width="3188" height="1202" alt="frame (3)" src="https://github.com/MadonaRoseIrenius/SOCIOMETER/blob/main/Images/IMG_20250809_111938_1.jpg" />
 OLED display
 <img width="3188" height="1202" alt="frame (3)" src="https://github.com/MadonaRoseIrenius/SOCIOMETER/blob/main/Sociometer/Images/IMG_20250809_111924.jpg" />
 ESP 32
