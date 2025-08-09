@@ -66,7 +66,7 @@ For Hardware:
 *Add caption explaining the schematic*
 
 # Build Photos
-![Components](Add photo of your components here)
+<img width="3188" height="1202" alt="frame (3)" src="" />
 *List out all components shown*
 
 ![Build](Add photos of build process here)
