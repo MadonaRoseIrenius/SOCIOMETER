@@ -67,7 +67,8 @@ For Hardware:
 
 # Build Photos
 <img width="3188" height="1202" alt="frame (3)" src="https://github.com/MadonaRoseIrenius/SOCIOMETER/blob/main/Sociometer/IMG_20250809_111913_1.jpg" />
-*List out all components shown*
+POWERBANK
+<img width="3188" height="1202" alt="frame (3)" src="https://github.com/MadonaRoseIrenius/SOCIOMETER/blob/main/Sociometer/IMG_20250809_111913_1.jpg" />
 
 ![Build](Add photos of build process here)
 *Explain the build steps*
