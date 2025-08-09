@@ -32,12 +32,8 @@ For Hardware:
 - [List tools required]
 
 ### Implementation
-For Software:
-# Installation
-[commands]
 
-# Run
-[commands]
+
 
 ### Project Documentation
 For Software:
@@ -46,15 +42,7 @@ For Software:
 <img width="3188" height="1202" alt="frame (3)" src="https://github.com/MadonaRoseIrenius/SOCIOMETER/blob/main/Images/Screenshot%202025-08-09%20115323.png" />
 Screenshot of Arduino IDE with the code upto line 38
 
-![Screenshot2](Add screenshot 2 here with proper name)
-*Add caption explaining what this shows*
 
-![Screenshot3](Add screenshot 3 here with proper name)
-*Add caption explaining what this shows*
-
-# Diagrams
-![Workflow](Add your workflow/architecture diagram here)
-*Add caption explaining your workflow*
 
 For Hardware:
 
