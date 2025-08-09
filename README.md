@@ -5,7 +5,7 @@
 
 
 ## Basic Details
-### Team Name: Irenius Solus
+### Team Name: Madona Rose Irenius
 
 ### Team Members
 - Team Lead: Madona Rose Irenius  
