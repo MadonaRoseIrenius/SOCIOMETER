@@ -43,7 +43,7 @@ For Software:
 For Software:
 
 # Screenshots (Add at least 3)
-<img width="3188" height="1202" alt="frame (3)" src="https://github.com/MadonaRoseIrenius/SOCIOMETER/blob/main/Sociometer/Screenshot%202025-08-09%20115323.png" />
+<img width="3188" height="1202" alt="frame (3)" src="https://github.com/MadonaRoseIrenius/SOCIOMETER/blob/main/Images/Screenshot%202025-08-09%20115323.png" />
 Screenshot of Arduino IDE with the code upto line 38
 
 ![Screenshot2](Add screenshot 2 here with proper name)
