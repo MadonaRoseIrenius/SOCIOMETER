@@ -59,7 +59,8 @@ Screenshot of Arduino IDE with the code upto line 38
 For Hardware:
 
 # Schematic & Circuit
-![Circuit](Add your circuit diagram here)
+<img width="3188" height="1202" alt="frame (3)" src="Sociometer/Images/circuit.png" />
+
 *Add caption explaining connections*
 
 ![Schematic](Add your schematic diagram here)
