@@ -66,8 +66,8 @@ GND -->GND
 D21 -->SDA
 D22 -->SCL
 
-![Schematic](Add your schematic diagram here)
-*Add caption explaining the schematic*
+<img width="3188" height="1202" alt="frame (3)" src="https://github.com/MadonaRoseIrenius/SOCIOMETER/blob/main/Sociometer/Images/circuit%202.png" />
+SCHEMATIV
 
 # Build Photos
 <img width="3188" height="1202" alt="frame (3)" src="https://github.com/MadonaRoseIrenius/SOCIOMETER/blob/main/Sociometer/Images/IMG_20250809_111913_1.jpg" />
