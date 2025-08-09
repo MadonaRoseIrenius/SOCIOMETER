@@ -78,8 +78,8 @@ Step 4: Finally tun it into a wearable headband
 
 ### Project Demo
 # Video
-[Add your demo video link here]
-*Explain what the video demonstrates*
+Video:(https://drive.google.com/file/d/1ONqdoLWhqQ2gJX7CZ8e5_Y6uO137xZbZ/view?usp=drivesdk)
+It shows the working of the wearable device
 
 # Additional Demos
 [Add any extra demo materials/links]
