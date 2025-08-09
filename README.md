@@ -76,7 +76,8 @@ POWERBANK
 OLED display
 <img width="3188" height="1202" alt="frame (3)" src="https://github.com/MadonaRoseIrenius/SOCIOMETER/blob/main/Images/IMG_20250809_111924.jpg" />
 ESP 32
-![Build](Add photos of build process here)
+#BUILD PHOTOS
+
 Step 1: Connect esp32 to the laptop and upload the code
 <img width="3188" height="1202" alt="frame (3)" src="https://github.com/MadonaRoseIrenius/SOCIOMETER/blob/main/Images/IMG_20250809_115456.jpg" />
 Step 2: Connect the OLED Display
@@ -95,10 +96,6 @@ Step 4: Finally tun it into a wearable headband
 # Additional Demos
 [Add any extra demo materials/links]
 
-## Team Contributions
-- [Name 1]: [Specific contributions]
-- [Name 2]: [Specific contributions]
-- [Name 3]: [Specific contributions]
 
 ---
 Made with ❤️ at TinkerHub Useless Projects 
