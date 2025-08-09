@@ -75,6 +75,7 @@ POWERBANK
 <img width="3188" height="1202" alt="frame (3)" src="https://github.com/MadonaRoseIrenius/SOCIOMETER/blob/main/Sociometer/Images/IMG_20250809_111938_1.jpg" />
 OLED display
 <img width="3188" height="1202" alt="frame (3)" src="https://github.com/MadonaRoseIrenius/SOCIOMETER/blob/main/Sociometer/Images/IMG_20250809_111924.jpg" />
+ESP 32
 ![Build](Add photos of build process here)
 *Explain the build steps*
 
