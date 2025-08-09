@@ -59,7 +59,7 @@ Screenshot of Arduino IDE with the code upto line 38
 For Hardware:
 
 # Schematic & Circuit
-<img width="3188" height="1202" alt="frame (3)" src="https://github.com/MadonaRoseIrenius/SOCIOMETER/blob/main/Sociometer/Images/circuit.png" />
+<img width="3188" height="1202" alt="frame (3)" src="https://github.com/MadonaRoseIrenius/SOCIOMETER/blob/main/Images/circuit.png" />
 
 3V3 -->VCC
 GND -->GND
