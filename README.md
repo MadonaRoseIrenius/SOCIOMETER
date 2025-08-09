@@ -66,7 +66,7 @@ GND -->GND
 D21 -->SDA
 D22 -->SCL
 
-<img width="3188" height="1202" alt="frame (3)" src="https://github.com/MadonaRoseIrenius/SOCIOMETER/blob/main/Sociometer/Images/circuit%202.png" />
+<img width="3188" height="1202" alt="frame (3)" src="https://github.com/MadonaRoseIrenius/SOCIOMETER/blob/main/Images/circuit%202.png" />
 SCHEMATIV
 
 # Build Photos
