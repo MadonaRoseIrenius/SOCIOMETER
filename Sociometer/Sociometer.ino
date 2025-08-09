@@ -212,14 +212,14 @@ const char htmlPage[] PROGMEM = R"rawliteral(
         
         <div class="display-section">
             <div class="oled-display">
-                <div class="emoji-display" id="oled-emoji">❓</div>
+                <div class="emoji-display" id="oled-emoji">?</div>
                 <div class="text-line" id="preview-line1">Not set</div>
                 <div class="text-line" id="preview-line2"></div>
             </div>
         </div>
         
         <div class="mood-section">
-            <h3>🎭 Select Your Mood:</h3>
+            <h3>UwU Select Your Mood:</h3>
             <div class="mood-buttons">
                 <button class="mood-btn" onclick="selectMood('happy')">Happy ^-^</button>
                 <button class="mood-btn" onclick="selectMood('sad')">Sad T-T</button>
@@ -252,12 +252,12 @@ const char htmlPage[] PROGMEM = R"rawliteral(
         let currentMood = 'none';
         
         const moods = {
-            'happy': {line1: 'Feeling Great!', line2: 'Have a nice day', emoji: '😊'},
-            'sad': {line1: 'Feeling Down', line2: 'Hope gets better', emoji: '😢'},
-            'angry': {line1: 'So Annoyed!', line2: 'Need some space', emoji: '😠'},
-            'excited': {line1: 'Super Pumped!', line2: "Let's do this!", emoji: '🤩'},
-            'neutral': {line1: 'All Good', line2: 'Just chilling', emoji: '😐'},
-            'none': {line1: 'Not set', line2: '', emoji: '❓'}
+            'happy': {line1: 'Feeling Great!', line2: 'Have a nice day', emoji: '^-^'},
+            'sad': {line1: 'Feeling Down', line2: 'Hope gets better', emoji: 'T-T'},
+            'angry': {line1: 'So Annoyed!', line2: 'Need some space', emoji: '):('},
+            'excited': {line1: 'Super Pumped!', line2: "Let's do this!", emoji: '*o*'},
+            'neutral': {line1: 'All Good', line2: 'Just chilling', emoji: ': |'},
+            'none': {line1: 'Not set', line2: '', emoji: '?'}
         };
         
         function selectMood(mood) {
