@@ -61,7 +61,10 @@ For Hardware:
 # Schematic & Circuit
 <img width="3188" height="1202" alt="frame (3)" src="https://github.com/MadonaRoseIrenius/SOCIOMETER/blob/main/Sociometer/Images/circuit.png" />
 
-*Add caption explaining connections*
+3V3 -->VCC
+GND -->GND
+D21 -->SDA
+D22 -->SCL
 
 ![Schematic](Add your schematic diagram here)
 *Add caption explaining the schematic*
