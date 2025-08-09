@@ -1,12 +1,8 @@
 #include <WiFi.h>
 #include <WebServer.h>
-#include <LiquidCrystal.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
-
-// LCD Pin mapping - RS, E, D4, D5, D6, D7
-LiquidCrystal lcd(15, 4, 14, 27, 26, 25);
 
 // OLED Display settings (128x64, I2C)
 #define SCREEN_WIDTH 128
@@ -18,16 +14,16 @@ LiquidCrystal lcd(15, 4, 14, 27, 26, 25);
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 // Access Point credentials
-const char* ssid = "ESP32-LCD-Controller";
+const char* ssid = "SOCIOMETER";
 const char* password = "12345678";
 
 // Create WebServer object on port 80
 WebServer server(80);
 
-// Variables to store LCD text and mood
+// Variables to store display text and mood
 String line1 = "";
 String line2 = "";
-String currentMood = "neutral";
+String currentMood = "none";
 
 // Function declarations
 void handleRoot();
@@ -35,7 +31,13 @@ void handleUpdate();
 void handleMood();
 void setMoodDisplay(String mood);
 String getMoodText(String mood, int line);
-void displayEmoji(String mood);
+void displayContent(String mood, String text1, String text2);
+void animateHappy();
+void animateSad();
+void animateAngry();
+void animateExcited();
+void animateNeutral();
+void animateNone();
 
 // Mood configurations
 struct MoodConfig {
@@ -45,12 +47,13 @@ struct MoodConfig {
   String emoji;
 };
 
-MoodConfig moods[5] = {
-  {"happy", "Feeling Great!", "Have a nice day", "😊"},
-  {"sad", "Feeling Down", "Hope gets better", "😢"}, 
-  {"angry", "So Annoyed!", "Need some space", "😠"},
-  {"excited", "Super Pumped!", "Let's do this!", "🤩"},
-  {"neutral", "All Good", "Just chilling", "😐"}
+MoodConfig moods[6] = {
+  {"happy", "Feeling Great!", "Have a nice day", "^_^"},
+  {"sad", "Feeling Down", "Hope gets better", "T_T"}, 
+  {"angry", "So Annoyed!", "Need some space", ">:("},
+  {"excited", "Super Pumped!", "Let's do this!", "*o*"},
+  {"neutral", "All Good", "Just chilling", ":|"},
+  {"none", "Not set", "", "?"}
 };
 
 // HTML page stored in program memory
@@ -58,7 +61,7 @@ const char htmlPage[] PROGMEM = R"rawliteral(
 <!DOCTYPE html>
 <html>
 <head>
-    <title>ESP32 LCD + OLED Controller</title>
+    <title>ESP32 OLED Controller</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         body {
@@ -82,45 +85,32 @@ const char htmlPage[] PROGMEM = R"rawliteral(
             font-size: 28px;
         }
         .display-section {
-            display: flex;
-            gap: 20px;
             margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-        .lcd-display, .oled-display {
-            flex: 1;
-            min-width: 250px;
-        }
-        .lcd-display {
-            background-color: #001a00;
-            color: #00ff00;
-            font-family: monospace;
-            font-size: 18px;
-            padding: 15px;
-            border-radius: 8px;
-            border: 3px solid #333;
-            min-height: 60px;
+            display: flex;
+            justify-content: center;
         }
         .oled-display {
             background-color: #000;
             color: #fff;
-            font-family: Arial, sans-serif;
+            font-family: monospace;
             padding: 20px;
             border-radius: 8px;
             border: 2px solid #444;
-            text-align: center;
-            min-height: 60px;
+            width: 300px;
+            height: 150px;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
+            align-items: center;
         }
-        .lcd-line {
-            display: block;
-            height: 25px;
-            overflow: hidden;
+        .emoji-display {
+            font-size: 32px;
+            margin-bottom: 10px;
         }
-        .emoji-large {
-            font-size: 48px;
+        .text-line {
+            font-size: 14px;
+            margin: 2px 0;
+            text-align: center;
         }
         .mood-section {
             margin-bottom: 30px;
@@ -218,39 +208,37 @@ const char htmlPage[] PROGMEM = R"rawliteral(
 </head>
 <body>
     <div class="container">
-        <h1>🎮 ESP32 LCD + OLED Controller</h1>
+        <h1>SOCIOMETER</h1>
         
         <div class="display-section">
-            <div class="lcd-display">
-                <span class="lcd-line" id="preview-line1">Ready for input!</span>
-                <span class="lcd-line" id="preview-line2"></span>
-            </div>
             <div class="oled-display">
-                <div class="emoji-large" id="oled-emoji">😐</div>
+                <div class="emoji-display" id="oled-emoji">❓</div>
+                <div class="text-line" id="preview-line1">Not set</div>
+                <div class="text-line" id="preview-line2"></div>
             </div>
         </div>
         
         <div class="mood-section">
             <h3>🎭 Select Your Mood:</h3>
             <div class="mood-buttons">
-                <button class="mood-btn" onclick="selectMood('happy')">😊</button>
-                <button class="mood-btn" onclick="selectMood('sad')">😢</button>
-                <button class="mood-btn" onclick="selectMood('angry')">😠</button>
-                <button class="mood-btn" onclick="selectMood('excited')">🤩</button>
-                <button class="mood-btn active" onclick="selectMood('neutral')">😐</button>
+                <button class="mood-btn" onclick="selectMood('happy')">Happy ^-^</button>
+                <button class="mood-btn" onclick="selectMood('sad')">Sad T-T</button>
+                <button class="mood-btn" onclick="selectMood('angry')">Angry ):(</button>
+                <button class="mood-btn" onclick="selectMood('excited')">Excited *o*</button>
+                <button class="mood-btn" onclick="selectMood('neutral')">Nuetral : |</button>
             </div>
         </div>
         
         <div class="custom-section">
-            <h3>✏️ Custom Text (Optional):</h3>
+            <h3>Custom Text (Optional):</h3>
             <form onsubmit="updateDisplay(); return false;">
-                <label for="line1">Line 1 (16 chars max):</label>
-                <input type="text" id="line1" maxlength="16" oninput="updatePreview()" placeholder="Leave empty for mood text...">
-                <div class="char-count" id="count1">0/16 characters</div>
+                <label for="line1">Line 1 (21 chars max):</label>
+                <input type="text" id="line1" maxlength="21" oninput="updatePreview()" placeholder="Leave empty for mood text...">
+                <div class="char-count" id="count1">0/21 characters</div>
                 
-                <label for="line2">Line 2 (16 chars max):</label>
-                <input type="text" id="line2" maxlength="16" oninput="updatePreview()" placeholder="Leave empty for mood text...">
-                <div class="char-count" id="count2">0/16 characters</div>
+                <label for="line2">Line 2 (21 chars max):</label>
+                <input type="text" id="line2" maxlength="21" oninput="updatePreview()" placeholder="Leave empty for mood text...">
+                <div class="char-count" id="count2">0/21 characters</div>
                 
                 <button type="submit">Update Display</button>
                 <button type="button" class="clear-btn" onclick="clearDisplay()">Clear All</button>
@@ -261,14 +249,15 @@ const char htmlPage[] PROGMEM = R"rawliteral(
     </div>
 
     <script>
-        let currentMood = 'neutral';
+        let currentMood = 'none';
         
         const moods = {
             'happy': {line1: 'Feeling Great!', line2: 'Have a nice day', emoji: '😊'},
             'sad': {line1: 'Feeling Down', line2: 'Hope gets better', emoji: '😢'},
             'angry': {line1: 'So Annoyed!', line2: 'Need some space', emoji: '😠'},
             'excited': {line1: 'Super Pumped!', line2: "Let's do this!", emoji: '🤩'},
-            'neutral': {line1: 'All Good', line2: 'Just chilling', emoji: '😐'}
+            'neutral': {line1: 'All Good', line2: 'Just chilling', emoji: '😐'},
+            'none': {line1: 'Not set', line2: '', emoji: '❓'}
         };
         
         function selectMood(mood) {
@@ -297,12 +286,12 @@ const char htmlPage[] PROGMEM = R"rawliteral(
             const line1 = line1Input || moods[currentMood].line1;
             const line2 = line2Input || moods[currentMood].line2;
             
-            document.getElementById('preview-line1').textContent = line1.padEnd(16, ' ');
-            document.getElementById('preview-line2').textContent = line2.padEnd(16, ' ');
+            document.getElementById('preview-line1').textContent = line1;
+            document.getElementById('preview-line2').textContent = line2;
             document.getElementById('oled-emoji').textContent = moods[currentMood].emoji;
             
-            document.getElementById('count1').textContent = line1Input.length + '/16 characters';
-            document.getElementById('count2').textContent = line2Input.length + '/16 characters';
+            document.getElementById('count1').textContent = line1Input.length + '/21 characters';
+            document.getElementById('count2').textContent = line2Input.length + '/21 characters';
         }
         
         function updateDisplay() {
@@ -326,7 +315,7 @@ const char htmlPage[] PROGMEM = R"rawliteral(
         function clearDisplay() {
             document.getElementById('line1').value = '';
             document.getElementById('line2').value = '';
-            selectMood('neutral');
+            selectMood('none');
             updateDisplay();
         }
         
@@ -356,15 +345,10 @@ void setup() {
   // Initialize OLED
   if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
     Serial.println("SSD1306 allocation failed");
-    // Continue anyway
+    while(true); // Don't proceed if OLED fails
   } else {
     Serial.println("OLED initialized successfully");
   }
-  
-  // Initialize LCD
-  lcd.begin(16, 2);
-  lcd.setCursor(0, 0);
-  lcd.print("Starting WiFi...");
   
   // Initialize OLED with startup message
   display.clearDisplay();
@@ -372,6 +356,8 @@ void setup() {
   display.setTextColor(SSD1306_WHITE);
   display.setCursor(0, 0);
   display.println("ESP32 Starting...");
+  display.println();
+  display.println("Initializing WiFi...");
   display.display();
   
   // Set up Access Point
@@ -381,19 +367,20 @@ void setup() {
   Serial.print("AP IP address: ");
   Serial.println(IP);
   
-  // Update displays with IP
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print("WiFi: Ready");
-  lcd.setCursor(0, 1);
-  lcd.print(IP);
-  
+  // Update OLED with connection info
   display.clearDisplay();
+  display.setTextSize(1);
   display.setCursor(0, 0);
   display.println("WiFi Ready!");
   display.println();
+  display.print("SSID: ");
+  display.println(ssid);
+  display.println();
   display.print("IP: ");
   display.println(IP);
+  display.println();
+  display.println("Connect and browse to");
+  display.println("the IP address above");
   display.display();
   
   // Define web server routes
@@ -405,10 +392,10 @@ void setup() {
   server.begin();
   Serial.println("HTTP server started");
   
-  delay(2000);
+  delay(3000);
   
-  // Set default mood
-  setMoodDisplay("neutral");
+  // Set default to "not set" state
+  setMoodDisplay("none");
 }
 
 void loop() {
@@ -429,26 +416,19 @@ void handleUpdate() {
     String displayLine1 = customLine1.length() > 0 ? customLine1 : getMoodText(mood, 1);
     String displayLine2 = customLine2.length() > 0 ? customLine2 : getMoodText(mood, 2);
     
-    // Ensure strings don't exceed 16 characters
-    if (displayLine1.length() > 16) displayLine1 = displayLine1.substring(0, 16);
-    if (displayLine2.length() > 16) displayLine2 = displayLine2.substring(0, 16);
+    // Ensure strings don't exceed reasonable length for OLED
+    if (displayLine1.length() > 21) displayLine1 = displayLine1.substring(0, 21);
+    if (displayLine2.length() > 21) displayLine2 = displayLine2.substring(0, 21);
     
-    // Update LCD
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print(displayLine1);
-    lcd.setCursor(0, 1);
-    lcd.print(displayLine2);
+    // Update OLED with mood and text
+    displayContent(mood, displayLine1, displayLine2);
     
-    // Update OLED with emoji
-    displayEmoji(mood);
+    Serial.println("OLED Display Updated:");
+    Serial.println("Line 1: " + displayLine1);
+    Serial.println("Line 2: " + displayLine2);
+    Serial.println("Mood: " + mood);
     
-    Serial.println("Displays Updated:");
-    Serial.println("LCD Line 1: " + displayLine1);
-    Serial.println("LCD Line 2: " + displayLine2);
-    Serial.println("OLED Mood: " + mood);
-    
-    server.send(200, "text/plain", "Displays updated successfully!");
+    server.send(200, "text/plain", "Display updated successfully!");
   } else {
     server.send(400, "text/plain", "Missing parameters");
   }
@@ -466,60 +446,211 @@ void handleMood() {
 }
 
 void setMoodDisplay(String mood) {
-  // Update LCD with mood text
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print(getMoodText(mood, 1));
-  lcd.setCursor(0, 1);
-  lcd.print(getMoodText(mood, 2));
-  
-  // Update OLED with emoji
-  displayEmoji(mood);
+  String line1 = getMoodText(mood, 1);
+  String line2 = getMoodText(mood, 2);
+  displayContent(mood, line1, line2);
 }
 
 String getMoodText(String mood, int line) {
-  for (int i = 0; i < 5; i++) {
+  for (int i = 0; i < 6; i++) {
     if (moods[i].name == mood) {
       return (line == 1) ? moods[i].lcdLine1 : moods[i].lcdLine2;
     }
   }
-  return (line == 1) ? "All Good" : "Just chilling";
+  return (line == 1) ? "Not set" : "";
 }
 
-void displayEmoji(String mood) {
+void displayContent(String mood, String text1, String text2) {
+  // Play mood animation first
+  if (mood == "happy") {
+    animateHappy();
+  } else if (mood == "sad") {
+    animateSad();
+  } else if (mood == "angry") {
+    animateAngry();
+  } else if (mood == "excited") {
+    animateExcited();
+  } else if (mood == "neutral") {
+    animateNeutral();
+  } else if (mood == "none") {
+    animateNone();
+  }
+  
+  // After animation, show the final static display
+  delay(500);
+  
   display.clearDisplay();
-  display.setTextSize(2);
+  
+  // Display emoji at the top center
+  display.setTextSize(3);
   display.setTextColor(SSD1306_WHITE);
   
-  // Center the emoji on the display
-  display.setCursor(45, 20);
+  String emoji = "";
+  for (int i = 0; i < 6; i++) {
+    if (moods[i].name == mood) {
+      emoji = moods[i].emoji;
+      break;
+    }
+  }
   
-  if (mood == "happy") {
-    display.println("^_^");
-    display.setTextSize(1);
-    display.setCursor(35, 45);
-    display.println("HAPPY!");
-  } else if (mood == "sad") {
-    display.println("T_T");
-    display.setTextSize(1);
-    display.setCursor(40, 45);
-    display.println("SAD...");
-  } else if (mood == "angry") {
-    display.println(">:(");
-    display.setTextSize(1);
-    display.setCursor(35, 45);
-    display.println("ANGRY!");
-  } else if (mood == "excited") {
-    display.println("*o*");
-    display.setTextSize(1);
-    display.setCursor(30, 45);
-    display.println("EXCITED!");
-  } else { // neutral
-    display.println(":|");
-    display.setTextSize(1);
-    display.setCursor(30, 45);
-    display.println("NEUTRAL");
+  // Center the emoji horizontally
+  int16_t x1, y1;
+  uint16_t w, h;
+  display.getTextBounds(emoji, 0, 0, &x1, &y1, &w, &h);
+  display.setCursor((SCREEN_WIDTH - w) / 2, 5);
+  display.println(emoji);
+  
+  // Display text lines
+  display.setTextSize(1);
+  
+  // First line of text
+  display.getTextBounds(text1, 0, 0, &x1, &y1, &w, &h);
+  display.setCursor((SCREEN_WIDTH - w) / 2, 35);
+  display.println(text1);
+  
+  // Second line of text
+  if (text2.length() > 0) {
+    display.getTextBounds(text2, 0, 0, &x1, &y1, &w, &h);
+    display.setCursor((SCREEN_WIDTH - w) / 2, 50);
+    display.println(text2);
   }
   
   display.display();
+}
+
+void animateHappy() {
+  // Bouncing happy face animation
+  for (int bounce = 0; bounce < 3; bounce++) {
+    for (int y = 0; y <= 10; y += 2) {
+      display.clearDisplay();
+      display.setTextSize(3);
+      display.setCursor(45, 15 + y);
+      display.println("^_^");
+      display.display();
+      delay(50);
+    }
+    for (int y = 10; y >= 0; y -= 2) {
+      display.clearDisplay();
+      display.setTextSize(3);
+      display.setCursor(45, 15 + y);
+      display.println("^_^");
+      display.display();
+      delay(50);
+    }
+  }
+}
+
+void animateSad() {
+  // Falling tear animation
+  display.clearDisplay();
+  display.setTextSize(3);
+  display.setCursor(45, 15);
+  display.println("T_T");
+  display.display();
+  delay(500);
+  
+  // Animate falling tears
+  for (int drop = 0; drop < 3; drop++) {
+    for (int y = 35; y <= 55; y += 3) {
+      display.clearDisplay();
+      display.setTextSize(3);
+      display.setCursor(45, 15);
+      display.println("T_T");
+      
+      // Draw tear drops
+      display.setTextSize(1);
+      display.setCursor(55, y);
+      display.println(".");
+      display.setCursor(65, y - 5);
+      display.println(".");
+      
+      display.display();
+      delay(100);
+    }
+    delay(200);
+  }
+}
+
+void animateAngry() {
+  // Shaking angry face
+  for (int shake = 0; shake < 8; shake++) {
+    display.clearDisplay();
+    display.setTextSize(3);
+    int xOffset = (shake % 2 == 0) ? 42 : 48;
+    display.setCursor(xOffset, 15);
+    display.println(">:(");
+    
+    // Add anger lines
+    display.setTextSize(1);
+    if (shake % 2 == 0) {
+      display.setCursor(30, 10);
+      display.println("!");
+      display.setCursor(90, 12);
+      display.println("!");
+    }
+    
+    display.display();
+    delay(150);
+  }
+}
+
+void animateExcited() {
+  // Pulsing excited face with stars
+  for (int pulse = 0; pulse < 4; pulse++) {
+    // Small size
+    display.clearDisplay();
+    display.setTextSize(2);
+    display.setCursor(50, 20);
+    display.println("*o*");
+    display.display();
+    delay(200);
+    
+    // Large size with stars
+    display.clearDisplay();
+    display.setTextSize(3);
+    display.setCursor(45, 15);
+    display.println("*o*");
+    
+    // Add sparkle stars
+    display.setTextSize(1);
+    display.setCursor(20, 10);
+    display.println("*");
+    display.setCursor(100, 15);
+    display.println("*");
+    display.setCursor(25, 40);
+    display.println("*");
+    display.setCursor(95, 35);
+    display.println("*");
+    
+    display.display();
+    delay(200);
+  }
+}
+
+void animateNeutral() {
+  // Simple fade in animation
+  for (int fade = 0; fade < 3; fade++) {
+    display.clearDisplay();
+    if (fade == 1) {
+      display.setTextSize(3);
+      display.setCursor(48, 15);
+      display.println(":|");
+    }
+    display.display();
+    delay(300);
+  }
+}
+
+void animateNone() {
+  // Question mark with blinking effect
+  for (int blink = 0; blink < 4; blink++) {
+    display.clearDisplay();
+    if (blink % 2 == 0) {
+      display.setTextSize(3);
+      display.setCursor(55, 15);
+      display.println("?");
+    }
+    display.display();
+    delay(400);
+  }
 }
