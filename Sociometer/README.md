@@ -66,7 +66,7 @@ For Hardware:
 *Add caption explaining the schematic*
 
 # Build Photos
-<img width="3188" height="1202" alt="frame (3)" src="" />
+<img width="3188" height="1202" alt="frame (3)" src="https://github.com/MadonaRoseIrenius/SOCIOMETER/blob/main/Sociometer/IMG_20250809_111913_1.jpg" />
 *List out all components shown*
 
 ![Build](Add photos of build process here)
